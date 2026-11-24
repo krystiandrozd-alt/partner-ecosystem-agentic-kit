@@ -1,7 +1,22 @@
 # Choose → Prove → Iterate — prompty i discovery (oferta AI u klienta)
 
-Materiał dla partnera ISV/OEM używającego **ISV/OEM Advisor** (`/oem-isv-advisor`).
+Materiał dla partnera ISV/OEM używającego **ISV/OEM Advisor**.
 Metodyka: **choose → prove → iterate** (Headless/MCP + Agentforce).
+
+### Wywołanie entry skill (host-specific)
+
+Skill ID `oem-isv-advisor` **nie** jest uniwersalną składnią slash-command.
+Podstaw w każdym prompcie poniżej formę z aktywnego hosta (zob.
+`skills/oem-isv-advisor/references/harness-runtime.md`):
+
+| Host | Przykład wywołania |
+|---|---|
+| Cursor / Claude Code (często) | `/oem-isv-advisor` lub namespaced `/…:oem-isv-advisor` |
+| Codex | `$oem-isv-advisor` |
+| Claude Desktop / app | jawna prośba o skill `oem-isv-advisor` (po uploadzie ZIP) |
+| Inny katalog | wybór z host skill catalog — nie zgaduj składni |
+
+W blokach kodu poniżej użyto placeholdera `<ENTRY>` — zamień na wywołanie z tabeli.
 
 ---
 
@@ -73,7 +88,7 @@ Zanim powstanie oferta, story mapa albo pilot autonomicznego agenta — zbierz o
 | `sfdx-project.json` + package dirs | Granica 2GP |
 | `mcpServerDefinition` / tool refs (jeśli są) | Hosted MCP vs external |
 | HXL / Lightning types (jeśli UI) | Rendering na kanale |
-| Auth: Named Credential / External Client App | Kierunek wywołań |
+| Auth: Named Credential / External Client App (tylko gdy ścieżka Hosted MCP tego wymaga) | Kierunek wywołań; Slack ma osobny flow mapowania |
 | Lista tools i opisy | Model selection vs direct invoke |
 
 ### Jeśli Agentforce
@@ -108,12 +123,13 @@ Zanim powstanie oferta, story mapa albo pilot autonomicznego agenta — zbierz o
 
 ## C. Prompty (kopiuj do Agenta)
 
-Start zawsze: `/oem-isv-advisor` (potem routuje do Headless/MCP, Agentforce, Security, Packaging…).
+Start zawsze od entry skilla (`<ENTRY>` — patrz tabela wyżej); potem routing do
+Headless/MCP, Agentforce, Security, Packaging…
 
 ### 1. Oferta dla klienta (scope + wartość)
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Tryb Ask. Metodyka: choose → prove → iterate.
 
 Przygotuj materiał do OFERTY dla klienta końcowego (nie cennik SF credits).
@@ -121,7 +137,9 @@ Kontekst: partner ISV wdraża AI (Agentforce i/lub Headless/MCP) w orgie klienta
 
 Dostarcz:
 1) Problem klienta i measurable outcome
-2) 2–3 opcje architektury (choose) z plus/minus
+2) Choose: rekomendowana ścieżka + plus/minus. Dodaj 1–2 realnie wykonalne
+   alternatywy TYLKO gdy istnieją; jeśli constraints zostawiają jedną ścieżkę —
+   nazwij constraint zamiast wymyślać nieosiągalną opcję.
 3) Zakres pilota (prove): 1 use case, acceptance criteria, co NIE wchodzi
 4) Co w iteracjach po pilocie (iterate)
 5) Podział: package-owned vs customer-owned setup
@@ -134,7 +152,7 @@ Oznacz evidence: fact / practitioner / inference / assumption / unknown.
 ### 2. User stories + story map
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Na bazie metodyki choose → prove → iterate zrób STORY MAPę wdrożenia AI u klienta.
 
 Persona: [np. handlowiec / agent support / manager]
@@ -152,7 +170,7 @@ Dostarcz:
 ### 3. Planning handbook (playbook projektu)
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Zrób PLANNING HANDBOOK (1–2 strony) dla partnera wdrażającego AI u klienta.
 
 Struktura:
@@ -170,7 +188,7 @@ Dla każdej fazy: input, output, owner (partner/klient), typowe błędy.
 ### 4. Autonomiczny agent w środowisku klienta
 
 ```
-/oem-isv-advisor → headless-mcp-advisor / agentforce-implementation-advisor
+<ENTRY> (dalej: headless-mcp-advisor / agentforce-implementation-advisor)
 Metodyka: choose → prove → iterate.
 
 Chcemy AUTONOMICZNEGO agenta w środowisku klienta Salesforce:
@@ -180,8 +198,11 @@ Chcemy AUTONOMICZNEGO agenta w środowisku klienta Salesforce:
 - Write vs read-only: [zakres]
 
 KROK CHOOSE:
-Porównaj native Agentforce actions vs hosted MCP vs external integration.
-Rekomenduj 1 ścieżkę + 1 alternatywę i fakt, który zmienia wybór.
+Porównaj native Agentforce actions vs hosted MCP vs external integration
+tylko tam, gdzie ścieżka jest realnie dostępna dla podanych constraints.
+Rekomenduj 1 ścieżkę. Dodaj alternatywę wyłącznie jeśli jest wykonalna;
+w przeciwnym razie nazwij constraint zamiast wymyślać opcję.
+Podaj fakt, który zmienia wybór.
 
 KROK PROVE:
 Zdefiniuj smallest useful pilot:
@@ -199,12 +220,13 @@ Nie deployuj — tylko plan; Act wymaga mojego OK.
 ### 5. Z oferty → pilot (jeden ciąg)
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Połącz: oferta + story map + pilot autonomicznego agenta.
 
 1) 3 bullet value proposition do oferty
 2) 5 user stories Must na pilot
-3) Choose: rekomendowana architektura (1 akapit)
+3) Choose: rekomendowana architektura (1 akapit). Alternatywa tylko jeśli
+   wykonalna; inaczej constraint.
 4) Prove: acceptance criteria pilota (pass/fail)
 5) Iterate: 3 kolejne rozszerzenia po sukcesie
 6) Lista pytań do klienta, bez których nie startujemy
@@ -215,19 +237,28 @@ Tryb Ask. Nie wymyślaj org/entitlements — oznacz unknown.
 ### 6. Assess środowiska (gdy jest dostęp)
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Tryb Assess (read-only).
-Oceń, czy jesteśmy gotowi na pilot autonomicznego agenta u klienta.
+Oceń GOTOWOŚĆ TECHNICZNĄ na pilot autonomicznego agenta u klienta
+(gotowe / brakuje / blocker). Mapuj na choose→prove→iterate.
 
-Sprawdź (jeśli dam dostęp): scratch-def / package boundary / MCP server defs / Agentforce metadata.
-Zwróć: gotowe / brakuje / blocker; mapuj na choose→prove→iterate.
-Na końcu: czy wolno iść do Act (tak/nie + dlaczego).
+Sprawdź (jeśli dam dostęp): scratch-def / package boundary / MCP server defs /
+Agentforce metadata. ECA wymagaj tylko gdy wybrana ścieżka to Hosted MCP
+z klientem OAuth (Claude/ChatGPT/Cursor itd.) — nie blokuj native Agentforce
+ani Slack osobnym wymaganiem ECA; dla scratch sprawdź udokumentowaną trasę
+Dev Hub/package (Setup nie tworzy ECA bezpośrednio w scratch).
+
+WAŻNE: wynik Assess to readiness, NIE authorization.
+Nawet przy „gotowe” NIE zezwalaj na Act. Osobno wypisz:
+- bounded plan (gdyby Act było rozważane),
+- że wymagane jest jawne approval partnera/klienta,
+- że readiness ≠ permission to execute.
 ```
 
 ### 7. Discovery — uzupełnij luki o kliencie i orgie
 
 ```
-/oem-isv-advisor
+<ENTRY>
 Tryb Ask. Nie zgaduj.
 
 Na podstawie tego, co już wiem:
@@ -244,12 +275,12 @@ Na podstawie tego, co już wiem:
 ## D. Mini-checklist przed wysłaniem oferty
 
 - [ ] Jest 1 mierzalny outcome i 1 use case pilota  
-- [ ] Są 2 opcje architektury (choose) + fakt rozstrzygający  
+- [ ] Choose: rekomendacja + fakt rozstrzygający; alternatywy tylko jeśli wykonalne (inaczej constraint)  
 - [ ] Acceptance pass/fail (prove) jest binarne  
 - [ ] Package vs customer setup rozdzielone  
 - [ ] Write/read i dane wrażliwe nazwane  
 - [ ] Unknowns wypisane (nie ukryte w marketingu)  
-- [ ] Act / deploy nie jest obiecany bez approval i Assess  
+- [ ] Assess readiness ≠ Act approval; deploy dopiero po jawnym OK  
 
 ---
 

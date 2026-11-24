@@ -113,8 +113,12 @@ Jeśli partner używa Agent Script: osobny pattern carrier + customer setup/impo
 
 ### MUST na środowisku (Assess)
 1. Org non-prod z włączonym Agentforce (jeśli ta ścieżka)  
-2. Potwierdzenie MCP Servers / feature enablement (jeśli MCP)  
-3. Możliwość utworzenia **External Client App** + scope `mcp_api`  
+2. Potwierdzenie MCP Servers / feature enablement (jeśli Hosted MCP)  
+3. **External Client App** + scope `mcp_api` — **tylko** gdy pilot używa Hosted MCP
+   z klientem OAuth (Claude / ChatGPT / Cursor itd.). Nie wymagaj ECA dla native
+   Agentforce-only ani dla Slack (osobny connection/mapping flow). W scratch:
+   Setup nie tworzy ECA bezpośrednio — użyj udokumentowanej trasy Dev Hub/package
+   (**practitioner** `channel-rollout.md`; **fact** Hosted MCP ECA guides).  
 4. User testowy z realnymi permissionami (nie tylko admin „na wszystko”)  
 5. Reprezentatywne dane use case  
 6. Jeśli ISV: scratch Agentforce-enabled + Dev Hub Einstein Chatbot (pod BotTemplate)  
@@ -132,14 +136,15 @@ Jeśli partner używa Agent Script: osobny pattern carrier + customer setup/impo
 | Sekcja oferty | Treść z research |
 |---|---|
 | Outcome | 1 measurable business result |
-| Choose | 2 opcje + fakt rozstrzygający (client + boundary) |
+| Choose | Rekomendacja + fakt rozstrzygający; alternatywa tylko jeśli wykonalna, inaczej constraint |
 | Prove (pilot) | 1 client, 1 task, pass/fail; Postman/raw przed modelem jeśli MCP |
-| Deliverables | Package assets **vs** customer setup checklist (ECA, agent-from-template, channel connect) |
+| Deliverables | Package assets **vs** customer setup (agent-from-template; ECA tylko dla Hosted MCP OAuth clients; Slack osobno) |
 | Exclusions | Credits/cennik SF; pełny change-mgmt; inne kanały poza pilotem |
 | Commercial assumptions | Flex Credits / Agentforce entitlement = client+AE |
 | Security | Per-user auth, FLS, tool restrictions, sandbox-first |
 | Iterate plan | 3 rozszerzenia po pass pilota |
 | Unknowns | Jawna lista |
+| Authority | Assess = technical readiness only; Act wymaga bounded plan + jawnego approval (readiness ≠ permission) |
 
 ---
 
